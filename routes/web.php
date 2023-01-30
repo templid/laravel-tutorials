@@ -20,17 +20,15 @@ Route::get('/', function () {
 });
 
 Route::get('/email', function() {
-    /**
-     * Simple message sending
-     */
-    // Mail::raw('Hello world', function(Message $message) {
-    //     $message->to('test@test.lt')
-    //         ->subject('Hello world')
-    //         ->html('<div><h1>Hello world</h1></div>');
-    // });
-
     Mail::to('test@test.com')
-        ->queue(new \App\Mail\OrderShipped());
+        ->queue(new \App\Mail\TransactionalEmail(
+            'Hello world subject',
+            '<div><h1>Hello world</h1></div>',
+            'Hello world',
+            new \App\Dto\EnvelopeDto(
+                to: ['test2@test.com']
+            )
+        ));
 
     return 'Message sent';
 });
