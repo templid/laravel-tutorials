@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Service\Templid\TemplidService;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,16 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/email', function() {
-    Mail::to('test@test.com')
-        ->queue(new \App\Mail\TransactionalEmail(
-            'Hello world subject',
-            '<div><h1>Hello world</h1></div>',
-            'Hello world',
-            new \App\Dto\EnvelopeDto(
-                to: ['test2@test.com']
-            )
-        ));
+Route::get('/email', function(TemplidService $templid) {
+    $email = $templid->setTemplateId(1)
+        ->setData(collect(['name' => 'John Doe']))
+        ->buildMailable();
+
+    Mail::to('test@test.com')->queue($email);
 
     return 'Message sent';
 });

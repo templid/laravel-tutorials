@@ -23,7 +23,7 @@ class TransactionalEmail extends Mailable
         protected string           $subjectString = '',
         protected string           $htmlContent   = '',
         protected string|null      $plainContent  = null,
-        protected EnvelopeDto|null $envelopeDto   = null,
+        protected EnvelopeDto|null $envelopeDto   = null
     ) {}
 
     /**
@@ -34,7 +34,7 @@ class TransactionalEmail extends Mailable
     public function envelope()
     {
         if ($this->envelopeDto === null) {
-            new Envelope();
+            return new Envelope();
         }
 
         return new Envelope(
