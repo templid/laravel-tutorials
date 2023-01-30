@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/email', function() {
+    /**
+     * Simple message sending
+     */
+    // Mail::raw('Hello world', function(Message $message) {
+    //     $message->to('test@test.lt')
+    //         ->subject('Hello world')
+    //         ->html('<div><h1>Hello world</h1></div>');
+    // });
+
+    Mail::to('test@test.com')
+        ->queue(new \App\Mail\OrderShipped());
+
+    return 'Message sent';
 });
