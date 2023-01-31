@@ -10,12 +10,12 @@ use Illuminate\Support\Collection;
 class TemplidTemplateFetcher
 {
     /**
-     * @param int        $templatedId
-     * @param Collection $data
+     * @param int             $templatedId
+     * @param Collection|null $data
      *
-     * @return array
+     * @return TemplidTemplateDto
      */
-    public function fetch(int $templatedId, Collection $data): TemplidTemplateDto
+    public function fetch(int $templatedId, ?Collection $data = null): TemplidTemplateDto
     {
         return new TemplidTemplateDto(
             subject: 'Hello world subject',

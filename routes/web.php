@@ -1,8 +1,10 @@
 <?php
 
+use App\Jobs\TransactionalEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Service\Templid\TemplidService;
+use Illuminate\Mail\Mailables\Address;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +21,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/email', function(TemplidService $templid) {
-    $email = $templid->setTemplateId(1)
-        ->setData(collect(['name' => 'John Doe']))
-        ->buildMailable();
-
-    Mail::to('test@test.com')->queue($email);
+Route::get('/email', function() {
+    TransactionalEmail::send(new Address('new3@test.com', 'Sergej'), 1, collect(['name' => 'John Doe']));
 
     return 'Message sent';
 });
