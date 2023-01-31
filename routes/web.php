@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/email', function() {
-    TransactionalEmail::send(new Address('new3@test.com', 'Sergej'), 1, collect(['name' => 'John Doe']));
+    TransactionalEmail::send(new Address('new3@test.com'), 2, collect(['name' => 'Dr. Who']));
 
     return 'Message sent';
 });
