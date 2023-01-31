@@ -13,25 +13,15 @@ class TransactionalEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * @param string           $subjectString
-     * @param string           $htmlContent
-     * @param string|null      $plainContent
-     * @param EnvelopeDto|null $envelopeDto
+    /** 
+     * @var EnvelopeDto|null
      */
-    public function __construct(
-        protected string           $subjectString = '',
-        protected string           $htmlContent   = '',
-        protected string|null      $plainContent  = null,
-        protected EnvelopeDto|null $envelopeDto   = null
-    ) {}
+    protected ?EnvelopeDto $envelopeDto = null;
 
     /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         if ($this->envelopeDto === null) {
             return new Envelope();
@@ -50,31 +40,36 @@ class TransactionalEmail extends Mailable
     }
 
     /**
-     * @return void
-     */
-    public function build(): void
-    {
-        $this->subject($this->subjectString);
-        $this->setContent();
-    }
-
-    /**
-     * @param string      $html
-     * @param string|null $plain
+     * @param string $html
+     * @param string $plain
      * 
-     * @return void
+     * @return self
      */
-    protected function setContent(): void
+    public function setContent(string $html = '', string $plain = ''): self
     {
-        if ($this->plainContent === null) {
-            $this->html($this->htmlContent);
+        if ($plain === '') {
+            $this->html($html);
 
-            return;
+            return $this;
         }
 
         $this->view = [
-            'html' => new HtmlString($this->htmlContent),
-            'raw'  => $this->plainContent,
+            'html' => new HtmlString($html),
+            'raw'  => $plain,
         ];
+
+        return $this;
+    }
+
+    /**
+     * @param EnvelopeDto|null $envelopeDto
+     * 
+     * @return self
+     */
+    public function setEnvelope(?EnvelopeDto $envelopeDto = null): self
+    {
+        $this->envelopeDto = $envelopeDto;
+
+        return $this;
     }
 }

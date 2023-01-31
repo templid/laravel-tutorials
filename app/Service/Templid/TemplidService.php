@@ -16,7 +16,8 @@ class TemplidService
      * @param TemplidTemplateFetcher $fetcher
      */
     public function __construct(
-        protected TemplidTemplateFetcher $fetcher
+        protected TemplidTemplateFetcher $fetcher,
+        protected TransactionalEmail $transactionalEmail,
     ) {}
 
     /**
@@ -33,11 +34,9 @@ class TemplidService
     ): Mailable {
         $template = $this->fetcher->fetch($templateId, $data);
 
-        return new TransactionalEmail(
-            subjectString: $template->getSubject(),
-            htmlContent:   $template->getHtml(),
-            plainContent:  $template->getText(),
-            envelopeDto:   $envelopeDto
-        );
+        return $this->transactionalEmail
+            ->subject($template->getSubject())
+            ->setContent($template->getHtml(), $template->getText())
+            ->setEnvelope($envelopeDto);
     }
 }

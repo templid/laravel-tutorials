@@ -1,9 +1,7 @@
 <?php
 
 use App\Jobs\TransactionalEmail;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-use App\Service\Templid\TemplidService;
 use Illuminate\Mail\Mailables\Address;
 
 /*
