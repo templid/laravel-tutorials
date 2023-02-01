@@ -12,6 +12,7 @@ use App\Service\Templid\TemplidService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Builder\TransactionalMailableBuilder;
 
 class TransactionalEmail implements ShouldQueue
 {
@@ -36,13 +37,13 @@ class TransactionalEmail implements ShouldQueue
     ) {}
 
     /**
-     * @param TemplidService $templid
+     * @param TransactionalMailableBuilder $mailableBuilder
      *
      * @return void
      */
-    public function handle(TemplidService $templid): void
+    public function handle(TransactionalMailableBuilder $mailableBuilder): void
     {
-        $email = $templid->buildMailable(
+        $email = $mailableBuilder->build(
             $this->templateId,
             $this->data,
             $this->envelopeDto

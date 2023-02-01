@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Templid;
+namespace App\Builder;
 
 use App\Dto\EnvelopeDto;
 use Illuminate\Mail\Mailable;
@@ -10,7 +10,7 @@ use App\Mail\TransactionalEmail;
 use Illuminate\Support\Collection;
 use App\Fetcher\TemplidTemplateFetcher;
 
-class TemplidService
+class TransactionalMailableBuilder
 {
     /**
      * @param TemplidTemplateFetcher $fetcher
@@ -27,7 +27,7 @@ class TemplidService
      * 
      * @return Mailable
      */
-    public function buildMailable(
+    public function build(
         int $templateId,
         ?Collection $data = null,
         ?EnvelopeDto $envelopeDto = null
