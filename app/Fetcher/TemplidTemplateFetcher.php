@@ -11,6 +11,7 @@ use Illuminate\Http\Client\Response;
 use App\Exceptions\RateLimitException;
 use Illuminate\Http\Client\PendingRequest;
 use App\Fetcher\Validator\TemplidFetcherResponseValidator;
+use Exception;
 
 class TemplidTemplateFetcher
 {
@@ -33,7 +34,7 @@ class TemplidTemplateFetcher
      */
     public function fetch(int $templatedId, ?Collection $data = null): TemplidTemplateDto
     {
-        $responseData = $this->request(
+        $responseData = $this->sendRequest(
             $templatedId,
             $data?->toArray() ?? []
         )->json();
@@ -51,7 +52,7 @@ class TemplidTemplateFetcher
      * 
      * @return Response
      */
-    protected function request(int $templatedId, array $data = []): Response
+    protected function sendRequest(int $templatedId, array $data = []): Response
     {
         $attempts = 0;
         $retry    = 3;
@@ -75,5 +76,7 @@ class TemplidTemplateFetcher
                 $attempts++;
             }
         } while ($attempts < $retry);
+
+        throw new Exception('Unable to fetch template');
     }
 }
