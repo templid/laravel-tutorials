@@ -4,6 +4,7 @@ namespace Tests\Unit\App\Fetcher;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
 use App\Exceptions\RateLimitException;
@@ -18,12 +19,12 @@ class TemplidTemplateFetcherTest extends TestCase
     /**
      * @var MockObject|PendingRequest
      */
-    protected PendingRequest $request;
+    protected MockObject $request;
 
     /**
      * @var MockObject|TemplidFetcherResponseValidator
      */
-    protected TemplidFetcherResponseValidator $validator;
+    protected MockObject $validator;
 
     /**
      * @return void
@@ -37,11 +38,16 @@ class TemplidTemplateFetcherTest extends TestCase
     /**
      * @dataProvider fetcherProvider
      * 
+     * @param array           $validData
+     * @param array           $expectedRequestParams
+     * @param Collection|null $requestParams
+     * 
      * @return void
      */
     public function testFetchReturnsValidResult(
         array $validData,
-        array $requestParams
+        array $expectedRequestParams,
+        ?Collection $requestParams
     ): void {
         $response = $this->createMock(Response::class);
 
@@ -66,12 +72,12 @@ class TemplidTemplateFetcherTest extends TestCase
             ->method('post')
             ->with(
                 'https://api.templid.com/v1/templates/1/render',
-                $requestParams
+                $expectedRequestParams
             )
             ->willReturn($response);
 
         $template = $this->getFetcher()
-            ->fetch(1, collect($requestParams));
+            ->fetch(1, $requestParams);
 
         $this->assertSame($validData['subject'], $template->getSubject());
         $this->assertSame($validData['html'], $template->getHtml());
@@ -81,11 +87,16 @@ class TemplidTemplateFetcherTest extends TestCase
     /**
      * @dataProvider fetcherProvider
      * 
+     * @param array           $validData
+     * @param array           $expectedRequestParams
+     * @param Collection|null $requestParams
+     * 
      * @return void
      */
     public function testFetchRetrunsValidResultAfterRateLimitException(
         array $validData,
-        array $requestParams
+        array $expectedRequestParams,
+        ?Collection $requestParams
     ): void {
         $rateLimitMessage = 'Rate limit exceeded';
 
@@ -117,7 +128,7 @@ class TemplidTemplateFetcherTest extends TestCase
             ->method('post')
             ->with(
                 'https://api.templid.com/v1/templates/1/render',
-                $requestParams
+                $expectedRequestParams
             )
             ->willReturn($response);
 
@@ -173,15 +184,27 @@ class TemplidTemplateFetcherTest extends TestCase
     public function fetcherProvider(): array
     {
         return [
-            [
+            'With request parameters' => [
                 'validData' => [
                     'subject' => 'Foo subject',
                     'html'    => '<h1>Hello world</h1>',
                     'text'    => 'Hello world',
                 ],
-                'requestParams' => [
+                'expectedRequestParams' => [
                     'foo' => 'bar',
                 ],
+                'requestParams' => collect([
+                    'foo' => 'bar',
+                ]),
+            ],
+            'No request parameters' =>[
+                'validData' => [
+                    'subject' => 'Foo subject',
+                    'html'    => '<h1>Hello world</h1>',
+                    'text'    => '',
+                ],
+                'expectedRequestParams' => [],
+                'requestParams' => null,
             ]
         ];
     }
