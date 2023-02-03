@@ -6,17 +6,24 @@ namespace App\Fetcher;
 
 use App\Dto\TemplidTemplateDto;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\Response;
+use App\Exceptions\RateLimitException;
 use Illuminate\Http\Client\PendingRequest;
+use App\Fetcher\Validator\TemplidFetcherResponseValidator;
 
 class TemplidTemplateFetcher
 {
     protected const API_URL = 'https://api.templid.com/v1/templates/%s/render';
 
     /**
-     * @param PendingRequest $request
+     * @param PendingRequest                  $request
+     * @param TemplidFetcherResponseValidator $validator
      */
-    public function __construct(protected PendingRequest $request)
-    {}
+    public function __construct(
+        protected PendingRequest                  $request,
+        protected TemplidFetcherResponseValidator $validator
+    ){}
 
     /**
      * @param int             $templatedId
@@ -26,19 +33,47 @@ class TemplidTemplateFetcher
      */
     public function fetch(int $templatedId, ?Collection $data = null): TemplidTemplateDto
     {
-        $response = $this->request
-            ->withToken(env('TEMPLID_TOKEN'))
-            ->post(
-                sprintf(self::API_URL, $templatedId),
-                $data?->toArray() ?? []
-            );
-
-        $responseData = $response->json();
+        $responseData = $this->request(
+            $templatedId,
+            $data?->toArray() ?? []
+        )->json();
 
         return new TemplidTemplateDto(
             subject: $responseData['subject'],
             html: $responseData['html'],
             text: $responseData['text'],
         );
+    }
+
+    /**
+     * @param int   $templatedId
+     * @param array $data
+     * 
+     * @return Response
+     */
+    protected function request(int $templatedId, array $data = []): Response
+    {
+        $attempts = 0;
+        $retry    = 3;
+
+        $url = sprintf(self::API_URL, $templatedId);
+
+        do {
+            try {
+                $response = $this->request
+                    ->withToken(env('TEMPLID_TOKEN'))
+                    ->post($url, $data);
+
+                $this->validator->validate($response);
+
+                return $response;
+            } catch (RateLimitException $e) {
+                Log::notice($e->getMessage());
+
+                sleep(1);
+
+                $attempts++;
+            }
+        } while ($attempts < $retry);
     }
 }

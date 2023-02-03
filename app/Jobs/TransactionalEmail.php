@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
-use App\Service\Templid\TemplidService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
