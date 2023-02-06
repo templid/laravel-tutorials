@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\App\Fetcher;
 
 use Exception;
@@ -45,8 +47,8 @@ class TemplidTemplateFetcherTest extends TestCase
      * @return void
      */
     public function testFetchReturnsValidResult(
-        array $validData,
-        array $expectedRequestParams,
+        array       $validData,
+        array       $expectedRequestParams,
         ?Collection $requestParams
     ): void {
         $response = $this->createMock(Response::class);
@@ -94,8 +96,8 @@ class TemplidTemplateFetcherTest extends TestCase
      * @return void
      */
     public function testFetchRetrunsValidResultAfterRateLimitException(
-        array $validData,
-        array $expectedRequestParams,
+        array       $validData,
+        array       $expectedRequestParams,
         ?Collection $requestParams
     ): void {
         $rateLimitMessage = 'Rate limit exceeded';
@@ -179,33 +181,32 @@ class TemplidTemplateFetcherTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return iterable
      */
-    public function fetcherProvider(): array
+    public function fetcherProvider(): iterable
     {
-        return [
-            'With request parameters' => [
-                'validData' => [
-                    'subject' => 'Foo subject',
-                    'html'    => '<h1>Hello world</h1>',
-                    'text'    => 'Hello world',
-                ],
-                'expectedRequestParams' => [
-                    'foo' => 'bar',
-                ],
-                'requestParams' => collect([
-                    'foo' => 'bar',
-                ]),
+        yield 'With request parameters' => [
+            'validData' => [
+                'subject' => 'Foo subject',
+                'html'    => '<h1>Hello world</h1>',
+                'text'    => 'Hello world',
             ],
-            'No request parameters' =>[
-                'validData' => [
-                    'subject' => 'Foo subject',
-                    'html'    => '<h1>Hello world</h1>',
-                    'text'    => '',
-                ],
-                'expectedRequestParams' => [],
-                'requestParams' => null,
-            ]
+            'expectedRequestParams' => [
+                'foo' => 'bar',
+            ],
+            'requestParams' => collect([
+                'foo' => 'bar',
+            ]),
+        ];
+
+        yield 'No request parameters' => [
+            'validData' => [
+                'subject' => 'Foo subject',
+                'html'    => '<h1>Hello world</h1>',
+                'text'    => '',
+            ],
+            'expectedRequestParams' => [],
+            'requestParams' => null,
         ];
     }
 

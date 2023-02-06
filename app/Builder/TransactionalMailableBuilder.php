@@ -14,6 +14,7 @@ class TransactionalMailableBuilder
 {
     /**
      * @param TemplidTemplateFetcher $fetcher
+     * @param TransactionalEmail     $transactionalEmail
      */
     public function __construct(
         protected TemplidTemplateFetcher $fetcher,
