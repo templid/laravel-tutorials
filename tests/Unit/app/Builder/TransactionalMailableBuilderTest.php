@@ -39,14 +39,15 @@ class TransactionalMailableBuilderTest extends TestCase
      */
     public function testBuildWithoutDataAndWithoutEnvelopeReturnsMailable(): void
     {
-        $subject = 'Foo subject';
-        $html    = 'Foo html';
-        $text    = 'Foo text';
+        $templateId = 1;
+        $subject    = 'Foo subject';
+        $html       = 'Foo html';
+        $text       = 'Foo text';
 
         $this->fetcher
             ->expects($this->once())
             ->method('fetch')
-            ->with(1, null)
+            ->with($templateId, null)
             ->willReturn(new TemplidTemplateDto(
                 $subject,
                 $html,
@@ -73,7 +74,7 @@ class TransactionalMailableBuilderTest extends TestCase
 
         $builder = $this->getBuilder();
 
-        $this->assertInstanceOf(Mailable::class, $builder->build(1));
+        $this->assertInstanceOf(Mailable::class, $builder->build($templateId));
     }
 
     /**
@@ -81,9 +82,10 @@ class TransactionalMailableBuilderTest extends TestCase
      */
     public function testBuildWithDataAndWithEnvelopeReturnsMailable(): void
     {
-        $subject = 'Foo subject';
-        $html    = 'Foo html';
-        $text    = 'Foo text';
+        $templateId = 1;
+        $subject    = 'Foo subject';
+        $html       = 'Foo html';
+        $text       = 'Foo text';
 
         $data = collect([
             'foo' => 'bar',
@@ -94,7 +96,7 @@ class TransactionalMailableBuilderTest extends TestCase
         $this->fetcher
             ->expects($this->once())
             ->method('fetch')
-            ->with(1, $data)
+            ->with($templateId, $data)
             ->willReturn(new TemplidTemplateDto(
                 $subject,
                 $html,
@@ -121,7 +123,7 @@ class TransactionalMailableBuilderTest extends TestCase
 
         $builder = $this->getBuilder();
 
-        $this->assertInstanceOf(Mailable::class, $builder->build(1, $data, $envelope));
+        $this->assertInstanceOf(Mailable::class, $builder->build($templateId, $data, $envelope));
     }
 
     /**

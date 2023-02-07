@@ -191,12 +191,8 @@ class TemplidTemplateFetcherTest extends TestCase
                 'html'    => '<h1>Hello world</h1>',
                 'text'    => 'Hello world',
             ],
-            'expectedRequestParams' => [
-                'foo' => 'bar',
-            ],
-            'requestParams' => collect([
-                'foo' => 'bar',
-            ]),
+            'expectedRequestParams' => ['foo' => 'bar'],
+            'requestParams'         => collect(['foo' => 'bar']),
         ];
 
         yield 'No request parameters' => [
@@ -206,7 +202,7 @@ class TemplidTemplateFetcherTest extends TestCase
                 'text'    => '',
             ],
             'expectedRequestParams' => [],
-            'requestParams' => null,
+            'requestParams'         => null,
         ];
     }
 

@@ -35,11 +35,10 @@ class TransactionalEmailTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->to = $this->createMock(Address::class);
-
+        $this->to              = $this->createMock(Address::class);
         $this->mailableBuilder = $this->createMock(TransactionalMailableBuilder::class);
+        $this->mailable        = $this->createMock(Mailable::class);
 
-        $this->mailable = $this->createMock(Mailable::class);
         $this->mailable->method('to')->willReturn($this->mailable);
         $this->mailable->method('cc')->willReturn($this->mailable);
         $this->mailable->method('bcc')->willReturn($this->mailable);
@@ -54,7 +53,8 @@ class TransactionalEmailTest extends TestCase
 
         $templateId = 1;
 
-        $this->mailableBuilder->expects($this->once())
+        $this->mailableBuilder
+            ->expects($this->once())
             ->method('build')
             ->with($templateId, null, null)
             ->willReturn($this->mailable);
@@ -79,7 +79,8 @@ class TransactionalEmailTest extends TestCase
         /** @var MockObject|EnvelopeDto $envelope */
         $envelope = $this->createMock(EnvelopeDto::class);
 
-        $this->mailableBuilder->expects($this->once())
+        $this->mailableBuilder
+            ->expects($this->once())
             ->method('build')
             ->with($templateId, $data, $envelope)
             ->willReturn($this->mailable);
