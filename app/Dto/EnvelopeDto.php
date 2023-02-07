@@ -9,14 +9,14 @@ use Illuminate\Mail\Mailables\Address;
 class EnvelopeDto
 {
     /**
-     * @param Address|null   $from
-     * @param array          $to
-     * @param array          $cc
-     * @param array          $bcc
-     * @param array          $replyTo
-     * @param array          $tags
-     * @param array          $metadata
-     * @param \Closure|array $using
+     * @param Address|null             $from
+     * @param array<string, Address>   $to
+     * @param array<string, Address>   $cc
+     * @param array<string, Address>   $bcc
+     * @param array<string, Address>   $replyTo
+     * @param string[]                 $tags
+     * @param array<mixed>             $metadata
+     * @param \Closure|array<\Closure> $using
      */
     public function __construct(
         protected Address|null   $from     = null,
@@ -38,7 +38,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return array<string, Address>
      */
     public function getTo(): array
     {
@@ -46,7 +46,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return array<string, Address>
      */
     public function getCc(): array
     {
@@ -54,7 +54,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return array<string, Address>
      */
     public function getBcc(): array
     {
@@ -62,7 +62,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return array<string, Address>
      */
     public function getReplyTo(): array
     {
@@ -70,7 +70,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTags(): array
     {
@@ -78,7 +78,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getMetadata(): array
     {
@@ -86,7 +86,7 @@ class EnvelopeDto
     }
 
     /**
-     * @return \Closure|array
+     * @return \Closure|array<\Closure>
      */
     public function getUsing(): \Closure|array
     {

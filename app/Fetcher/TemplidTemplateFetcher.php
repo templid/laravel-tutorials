@@ -34,6 +34,7 @@ class TemplidTemplateFetcher
      */
     public function fetch(int $templatedId, ?Collection $data = null): TemplidTemplateDto
     {
+        /** @var array{subject: string, html: string, text: string} $responseData*/
         $responseData = $this->sendRequest(
             $templatedId,
             $data?->toArray() ?? []
@@ -47,8 +48,8 @@ class TemplidTemplateFetcher
     }
 
     /**
-     * @param int   $templatedId
-     * @param array $data
+     * @param int          $templatedId
+     * @param array<mixed> $data
      * 
      * @return Response
      */
