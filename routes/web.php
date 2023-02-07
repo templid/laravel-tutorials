@@ -1,6 +1,8 @@
 <?php
 
+use App\Jobs\TransactionalEmail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Mail\Mailables\Address;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/email', function() {
+    TransactionalEmail::send(
+        to: new Address('transactional@test.com'),
+        data: collect(['name' => 'Dr. Who']),
+        templateId: 2
+    );
+
+    return 'Message sent';
 });
