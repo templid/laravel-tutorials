@@ -21,12 +21,12 @@ class TemplidTemplateFetcherTest extends TestCase
     /**
      * @var MockObject|PendingRequest
      */
-    protected MockObject $request;
+    protected $request;
 
     /**
      * @var MockObject|TemplidFetcherResponseValidator
      */
-    protected MockObject $validator;
+    protected $validator;
 
     /**
      * @return void

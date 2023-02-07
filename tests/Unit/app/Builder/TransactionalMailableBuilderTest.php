@@ -18,12 +18,12 @@ class TransactionalMailableBuilderTest extends TestCase
     /**
      * @var MockObject|TemplidTemplateFetcher
      */
-    protected MockObject $fetcher;
+    protected $fetcher;
 
     /**
      * @var MockObject|TransactionalEmail
      */
-    protected MockObject $transactionalEmail;
+    protected $transactionalEmail;
 
     /**
      * @return void

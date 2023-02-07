@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Fetcher;
 
+use Exception;
 use App\Dto\TemplidTemplateDto;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -11,7 +12,6 @@ use Illuminate\Http\Client\Response;
 use App\Exceptions\RateLimitException;
 use Illuminate\Http\Client\PendingRequest;
 use App\Fetcher\Validator\TemplidFetcherResponseValidator;
-use Exception;
 
 class TemplidTemplateFetcher
 {
@@ -34,7 +34,7 @@ class TemplidTemplateFetcher
      */
     public function fetch(int $templatedId, ?Collection $data = null): TemplidTemplateDto
     {
-        /** @var array{subject: string, html: string, text: string} $responseData*/
+        /** @var array{subject: string, html: string, text: string} $responseData */
         $responseData = $this->sendRequest(
             $templatedId,
             $data?->toArray() ?? []
@@ -42,8 +42,8 @@ class TemplidTemplateFetcher
 
         return new TemplidTemplateDto(
             subject: $responseData['subject'],
-            html: $responseData['html'],
-            text: $responseData['text'],
+            html:    $responseData['html'],
+            text:    $responseData['text']
         );
     }
 

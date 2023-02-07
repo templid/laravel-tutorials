@@ -18,17 +18,17 @@ class TransactionalEmailTest extends TestCase
     /**
      * @var MockObject|Address
      */
-    protected MockObject $to;
+    protected $to;
 
     /**
      * @var MockObject|Mailable
      */
-    protected MockObject $mailable;
+    protected $mailable;
 
     /**
      * @var MockObject|TransactionalMailableBuilder
      */
-    protected MockObject $mailableBuilder;
+    protected $mailableBuilder;
 
     /**
      * @return void

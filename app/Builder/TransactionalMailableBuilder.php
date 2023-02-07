@@ -18,7 +18,7 @@ class TransactionalMailableBuilder
      */
     public function __construct(
         protected TemplidTemplateFetcher $fetcher,
-        protected TransactionalEmail $transactionalEmail,
+        protected TransactionalEmail     $transactionalEmail,
     ) {}
 
     /**
@@ -29,8 +29,8 @@ class TransactionalMailableBuilder
      * @return Mailable
      */
     public function build(
-        int $templateId,
-        ?Collection $data = null,
+        int          $templateId,
+        ?Collection  $data = null,
         ?EnvelopeDto $envelopeDto = null
     ): Mailable {
         $template = $this->fetcher->fetch($templateId, $data);
